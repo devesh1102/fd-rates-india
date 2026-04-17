@@ -57,10 +57,10 @@ jobs:
               --username ${{ github.actor }} \
               --password ${{ secrets.GITHUB_TOKEN }}
 
-            # Deploy new image with min 1 replica always running
+            # Deploy new image — scale to zero when idle to save cost
             az containerapp update \
               --name ${{ env.CONTAINER_APP }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
               --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
-              --min-replicas 1 \
+              --min-replicas 0 \
               --max-replicas 1
