@@ -48,10 +48,13 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az extension add --name containerapp --upgrade --allow-preview true -y
+            az containerapp registry set \
+              --name ${{ env.CONTAINER_APP }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --server ghcr.io \
+              --username ${{ github.actor }} \
+              --password ${{ secrets.GITHUB_TOKEN }}
             az containerapp update \
               --name ${{ env.CONTAINER_APP }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
-              --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
-              --registry-server ghcr.io \
-              --registry-username ${{ github.actor }} \
-              --registry-password ${{ secrets.GITHUB_TOKEN }}
+              --image ${{ env.IMAGE_NAME }}:${{ github.sha }}
