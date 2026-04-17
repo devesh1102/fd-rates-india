@@ -48,13 +48,19 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az extension add --name containerapp --upgrade --allow-preview true -y
+
+            # Register GHCR credentials
             az containerapp registry set \
               --name ${{ env.CONTAINER_APP }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
               --server ghcr.io \
               --username ${{ github.actor }} \
               --password ${{ secrets.GITHUB_TOKEN }}
+
+            # Deploy new image with min 1 replica always running
             az containerapp update \
               --name ${{ env.CONTAINER_APP }} \
               --resource-group ${{ env.RESOURCE_GROUP }} \
-              --image ${{ env.IMAGE_NAME }}:${{ github.sha }}
+              --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+              --min-replicas 1 \
+              --max-replicas 1
