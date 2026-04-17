@@ -1,6 +1,7 @@
 """
 Streamlit UI for Indian Bank FD Rates Fetcher.
 Run with: streamlit run app.py
+pandas>=2.2 uses Styler.map() not Styler.applymap()
 """
 
 import sys
