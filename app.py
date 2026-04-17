@@ -92,6 +92,7 @@ HTML_BANKS = list(SCRAPERS.keys())
 # ---------------------------------------------------------------------------
 st.sidebar.title("🏦 FD Rates India")
 st.sidebar.caption("Live rates from official bank websites")
+st.sidebar.caption("v1.1 · pandas 2.x fix")
 
 page = st.sidebar.radio(
     "Navigate",
