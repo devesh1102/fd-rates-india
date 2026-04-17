@@ -51,24 +51,7 @@ st.markdown(
 # Helpers
 # ---------------------------------------------------------------------------
 
-def rate_color(val):
-    if pd.isna(val):
-        return ""
-    if val >= 7.5:
-        return "background-color: #1b5e20; color: white"
-    if val >= 7.0:
-        return "background-color: #2e7d32; color: white"
-    if val >= 6.5:
-        return "background-color: #388e3c; color: white"
-    if val >= 6.0:
-        return "background-color: #f9a825; color: black"
-    if val >= 5.0:
-        return "background-color: #e65100; color: white"
-    return "background-color: #b71c1c; color: white"
 
-
-def style_rate_df(df: pd.DataFrame, rate_cols: list[str]) -> object:
-    return df.style.map(rate_color, subset=rate_cols)
 
 
 def tenure_to_days(tenure: str) -> int:
@@ -232,7 +215,7 @@ elif page == "📊 Bank Explorer":
         # Styled table
         st.subheader(f"Rate Table  ·  *updated {last_updated}*")
         st.dataframe(
-            style_rate_df(df.drop(columns=["Last Updated", "Source URL"]), ["Regular (%)", "Senior Citizen (%)"]),
+            df.drop(columns=["Last Updated", "Source URL"]),
             use_container_width=True,
             hide_index=True,
             height=min(60 + len(df) * 38, 600),
@@ -333,7 +316,7 @@ elif page == "🏆 Best Rates":
         with col_r:
             st.subheader("💼 Best Regular Rates")
             st.dataframe(
-                style_rate_df(best_reg, ["Regular (%)"]),
+                best_reg,
                 use_container_width=True,
                 height=min(60 + len(best_reg) * 38, 400),
             )
@@ -363,7 +346,7 @@ elif page == "🏆 Best Rates":
         with col_s:
             st.subheader("👴 Best Senior Citizen Rates")
             st.dataframe(
-                style_rate_df(best_sen, ["Senior (%)"]),
+                best_sen,
                 use_container_width=True,
                 height=min(60 + len(best_sen) * 38, 400),
             )
@@ -473,7 +456,7 @@ elif page == "🏆 Best Rates":
             df.index = range(1, len(df) + 1)
 
             st.dataframe(
-                style_rate_df(df, ["Rate (%)"]),
+                df,
                 use_container_width=True,
                 height=min(60 + len(df) * 38, 500),
             )
@@ -574,7 +557,7 @@ elif page == "📈 Compare Banks":
 
     with col_tbl:
         st.dataframe(
-            style_rate_df(peak_df, ["Best Regular (%)", "Best Senior (%)"]),
+            peak_df,
             use_container_width=True,
             hide_index=True,
             height=min(60 + len(peak_df) * 38, 420),
@@ -707,10 +690,7 @@ elif page == "📈 Compare Banks":
     with st.expander("📋 Raw data table"):
         cols_show = ["Bank", "Tenure", "Regular (%)", "Senior Citizen (%)"]
         st.dataframe(
-            style_rate_df(
-                df_all[cols_show].sort_values(["Bank", "Days Min"]),
-                ["Regular (%)", "Senior Citizen (%)"],
-            ),
+            df_all[cols_show].sort_values(["Bank", "Days Min"]),
             use_container_width=True,
             hide_index=True,
         )
