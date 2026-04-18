@@ -690,7 +690,7 @@ elif page == "📈 Compare Banks":
     with st.expander("📋 Raw data table"):
         cols_show = ["Bank", "Tenure", "Regular (%)", "Senior Citizen (%)"]
         st.dataframe(
-            df_all[cols_show].sort_values(["Bank", "Days Min"]),
+            df_all.sort_values(["Bank", "Days Min"])[cols_show],
             use_container_width=True,
             hide_index=True,
         )
