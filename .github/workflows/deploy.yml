@@ -35,6 +35,22 @@ jobs:
           docker push ${{ env.IMAGE_NAME }}:latest
           docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
+      - name: Purge old images from ACR (keep only latest 2)
+        run: |
+          # Delete all manifests except the 2 most recent (latest + current sha)
+          OLD_TAGS=$(az acr repository show-tags \
+            --name ${{ env.ACR_NAME }} \
+            --repository fd-rates-india \
+            --orderby time_asc \
+            --output tsv | head -n -2)
+          for tag in $OLD_TAGS; do
+            echo "Deleting old image tag: $tag"
+            az acr repository delete \
+              --name ${{ env.ACR_NAME }} \
+              --image fd-rates-india:$tag \
+              --yes
+          done
+
       - name: Deploy to Azure Container Apps (managed identity pull)
         uses: azure/cli@v2
         with:
